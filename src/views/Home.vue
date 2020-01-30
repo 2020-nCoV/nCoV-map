@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <img alt="nCoVlogo" src="../assets/logo.png">
     <Map msg="Welcome to nCoV-map App"/>
   </div>
 </template>
