@@ -59,4 +59,22 @@ export default {
   padding-top: 20px;
   text-align: center;
   height: 650px;
+
+@media (max-width:719px) {
+  .app-title {
+    font-size: 18px
+    font-weight: 800
+    margin-left: 10px
+  }
+
+  .logo {
+    display: none
+  }
+
+  .sidebar-button {
+      display: inline-block;
+  }
+}
+
+
 </style>

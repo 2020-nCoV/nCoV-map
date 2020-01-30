@@ -1,5 +1,6 @@
 <template>
     <div class='logo-wrapper'>
+        <div class="sidebar-button"></div>
         <div class='logo'></div>
         <div class='app-title'>nCov疫情大数据分析与预警平台</div>
     </div>
@@ -9,6 +10,14 @@
 <style lang="stylus">
 .logo-wrapper
   text-align: left
+
+.sidebar-button
+  position: relative
+  top: 4px
+  display none
+  width: 20px
+  height: 20px
+  background: url('../assets/bars.svg') no-repeat center
 
 .logo
   position relative
