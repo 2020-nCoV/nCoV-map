@@ -1,63 +1,59 @@
 <template>
   <el-menu
-    default-active="1"
-    class="el-menu-vertical-demo"
-    @open="handleOpen"
-    @close="handleClose">
-    <el-menu-item index="1">
-      <i class="el-icon-menu"></i>
-      <span slot="title">实时疫情</span>
-    </el-menu-item>
-    <el-menu-item index="2">
-      <i class="el-icon-first-aid-kit"></i>
-      <span slot="title">援助武汉</span>
-    </el-menu-item>
-    <el-menu-item index="3">
-      <i class="el-icon-s-promotion"></i>
-      <span slot="title">人口迁移</span>
-    </el-menu-item>
-    <el-menu-item index="4">
-      <i class="el-icon-timer"></i>
-      <span slot="title">时间序列分析</span>
-    </el-menu-item>
-    <el-menu-item index="5">
-      <i class="el-icon-location-information"></i>
-      <span slot="title">空间结构分析</span>
-    </el-menu-item>
-    <el-menu-item index="6">
-      <i class="el-icon-chat-line-square"></i>
-      <span slot="title">疫情驱动分析</span>
-    </el-menu-item>
-    <el-menu-item index="7">
-      <i class="el-icon-connection"></i>
-      <span slot="title">舆情分析</span>
-    </el-menu-item>
-    <el-menu-item index="8">
-      <i class="el-icon-document"></i>
-      <span slot="title">问卷分析</span>
-    </el-menu-item>
-    <el-menu-item index="9">
-      <i class="el-icon-s-data"></i>
-      <span slot="title">统计分析</span>
-    </el-menu-item>
-    <el-menu-item index="10">
-      <i class="el-icon-message-solid"></i>
-      <span slot="title">预警分析</span>
+    :default-active="defaultActive"
+    @select='handleSelect'
+    >
+    <el-menu-item v-for="(item, index) in menus" :index="`${index + 1}`" :key="item.icon">
+      <i :class="item.icon"></i>
+      <span slot="title">{{item.name}}</span>
     </el-menu-item>
   </el-menu>
 </template>
 
 <script>
-
 export default {
+  data() {
+    return {
+      defaultActive: '1',
+      menus: [
+        { name: '实时疫情', icon: 'el-icon-menu', value: 'situation' },
+        { name: '援助武汉', icon: 'el-icon-first-aid-kit', value: 'support' },
+        { name: '人口迁移', icon: 'el-icon-s-promotion', value: 'migrate' },
+        { name: '时间序列分析', icon: 'el-icon-timer', value: 'time-analyse' },
+        { name: '空间结构分析', icon: 'el-icon-location-information', value: 'space-analyse' },
+        { name: '疫情驱动分析', icon: 'el-icon-chat-line-square', value: 'drive-analyse' },
+        { name: '舆情分析', icon: 'el-icon-connection', value: 'public-opinion' },
+        { name: '问卷分析', icon: 'el-icon-document', value: 'question' },
+        { name: '统计分析', icon: 'el-icon-s-data', value: 'statistics' },
+        { name: '预警分析', icon: 'el-icon-message-solid', value: 'alarm' },
+      ],
+    };
+  },
   methods: {
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath);
+    handleSelect(index) {
+      const path = this.menus[index - 1].value;
+      this.$router.push(path).catch((e) => {
+        if (e.name !== 'NavigationDuplicated') { throw new Error(e); }
+      });
     },
-    handleClose(key, keyPath) {
-      console.log(key, keyPath);
+    getIndexOfPath(path) {
+      for (let i = 0; i < this.menus.length; i += 1) {
+        if (path.slice(1) === this.menus[i].value) {
+          return `${i + 1}`;
+        }
+      }
+      return '0';
     },
   },
-
+  watch: {
+    $route: {
+      handler(to) {
+        const { path } = to;
+        const index = this.getIndexOfPath(path);
+        this.defaultActive = index;
+      },
+      immediate: true,
+    },
+  },
 };
 </script>
