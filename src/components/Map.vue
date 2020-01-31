@@ -12,7 +12,23 @@
 <script>
 import chinaJson from 'echarts/map/json/china.json';
 import _ from 'lodash';
+import provinceData from '../assets/data/20200201';
 
+const LEVE_1 = '>1000人';
+const LEVE_2 = '500-999人';
+const LEVE_3 = '100-499人';
+const LEVE_4 = '10-99人';
+const LEVE_5 = '1-9人';
+const COLOR_LEVE_1 = '#7F1818';
+const COLOR_LEVE_2 = '#BF2121';
+const COLOR_LEVE_3 = '#FF7B69';
+const COLOR_LEVE_4 = '#FFAA85';
+const COLOR_LEVE_5 = '#FFEDCC';
+
+let max;
+const min = 1;
+const pinMax = 100;
+const pinMin = 30;
 export default {
   name: 'Map',
   props: {
@@ -31,13 +47,148 @@ export default {
     getEchartsInstance() {
       return this.$echarts.init(document.getElementById('myChart'));
     },
+    getGeoCoordMap(featuresData) {
+      // {"天津": [117.190182, 39.125596]}
+      const geoCoordMap = {};
+      featuresData.forEach((v) => {
+        const { name } = v.properties;
+        geoCoordMap[name] = v.properties.cp;
+      });
+      return geoCoordMap;
+    },
+    convertProvinceDataWithCp(data) {
+      // {name: "天津", value: [117.190182, 39.125596, 42]}
+      const cpData = this.getGeoCoordMap(chinaJson.features);
+      const newData = [];
+      for (let i = 0; i < data.length; i += 1) {
+        const { name } = data[i];
+        newData.push({ name: data[i].name, value: cpData[name].concat(data[i].value) });
+      }
+      return newData;
+    },
+    convertProvinceData(data) {
+      // {name: "天津", value: [42, '10-99人']}
+      const newData = [];
+      for (let i = 0; i < data.length; i += 1) {
+        const temp = data[i].value;
+        let category = '';
+        if (temp >= 1000) {
+          category = LEVE_1;
+        } else if (temp >= 500 && temp <= 999) {
+          category = LEVE_2;
+        } else if (temp >= 100 && temp <= 499) {
+          category = LEVE_3;
+        } else if (temp >= 10 && temp <= 99) {
+          category = LEVE_4;
+        } else if (temp >= 1 && temp <= 9) {
+          category = LEVE_5;
+        }
+        newData.push({ name: data[i].name, value: [temp, category] });
+      }
+      return newData;
+    },
     drawMap() {
       const mapName = 'china';
       this.$echarts.registerMap(mapName, chinaJson, {});
       this.getEchartsInstance().setOption({
-        geo: {
-          map: mapName,
+        title: {
+          text: `${provinceData.date} 疫情地图`,
+          left: '40%',
+          top: 'left',
+          textStyle: {
+            fontWeight: 'normal',
+          },
         },
+        visualMap: {
+          type: 'piecewise',
+          show: true,
+          min: 0,
+          max: 200000,
+          left: 'left',
+          top: 'bottom',
+          calculable: true,
+          seriesIndex: [1],
+          categories: [LEVE_1, LEVE_2, LEVE_3, LEVE_4, LEVE_5],
+          inRange: {
+            color: [COLOR_LEVE_1, COLOR_LEVE_2, COLOR_LEVE_3, COLOR_LEVE_4, COLOR_LEVE_5],
+          },
+        },
+        geo: {
+          show: true,
+          map: mapName,
+          roam: true,
+          label: {
+            show: true,
+            position: 'right',
+            // distance: '10',
+            offset: [0, 5],
+            color: '#000',
+            fontWeight: 'bold',
+            fontSize: '11',
+          },
+          itemStyle: {
+            normal: {
+              // areaColor: '#031525',
+              // borderColor: '#fff',
+            },
+            emphasis: {
+              areaColor: '#e7e7e7',
+              borderColor: '#FF6258',
+              borderWidth: '5',
+            },
+          },
+        },
+        series: [
+          {
+            name: '气泡',
+            type: 'scatter',
+            coordinateSystem: 'geo',
+            data: this.convertProvinceDataWithCp(provinceData.data),
+            symbol: 'pin',
+            symbolSize(val) {
+              max = provinceData.data.map(item => item.value).sort((a, b) => a - b).pop();
+              console.log(max);
+              const d = (pinMax - pinMin) / (max - min);
+              return pinMax - (max - val[2]) * d;
+            },
+
+            label: {
+              normal: {
+                formatter(val) {
+                  return val.value[2];
+                },
+                show: true,
+                textStyle: {
+                  color: '#000',
+                  fontSize: 9,
+                },
+              },
+            },
+            itemStyle: {
+              normal: {
+                color: '#FFC900',
+              },
+            },
+            zLevel: 6,
+          },
+          {
+            type: 'map',
+            map: mapName,
+            geoIndex: 0,
+            data: this.convertProvinceData(provinceData.data),
+            itemStyle: {
+              normal: {
+                label: {
+                  show: true,
+                  position: 'inside',
+                  color: '#000',
+                  fontWeight: 'bold',
+                },
+              },
+              areaColor: '#fff',
+            },
+          },
+        ],
       });
     },
   },
