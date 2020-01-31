@@ -58,7 +58,7 @@ export default {
 .el-aside
   padding-top: 20px;
   text-align: center;
-  height: 650px;
+  height: 100%;
 
 @media (max-width:719px) {
   .app-title {
@@ -75,6 +75,5 @@ export default {
       display: inline-block;
   }
 }
-
 
 </style>

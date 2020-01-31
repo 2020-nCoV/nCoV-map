@@ -1,19 +1,22 @@
 <template>
-  <el-menu
-    :default-active="defaultActive"
-    @select='handleSelect'
-    >
-    <el-menu-item v-for="(item, index) in menus" :index="`${index + 1}`" :key="item.icon">
-      <i :class="item.icon"></i>
-      <span slot="title">{{item.name}}</span>
-    </el-menu-item>
-  </el-menu>
+  <div :style='style'>
+    <el-menu
+      :default-active="defaultActive"
+      @select='handleSelect'
+      >
+      <el-menu-item v-for="(item, index) in menus" :index="`${index + 1}`" :key="item.icon">
+        <i :class="item.icon"></i>
+        <span slot="title">{{item.name}}</span>
+      </el-menu-item>
+    </el-menu>
+  </div>
 </template>
 
 <script>
 export default {
   data() {
     return {
+      style: { height: `${window.innerHeight - 120}px` },
       defaultActive: '1',
       menus: [
         { name: '实时疫情', icon: 'el-icon-menu', value: 'situation' },
@@ -30,6 +33,9 @@ export default {
     };
   },
   methods: {
+    resizeNav() {
+      this.style.height = `${window.innerHeight - 120}px`;
+    },
     handleSelect(index) {
       const path = this.menus[index - 1].value;
       this.$router.push(path).catch((e) => {
@@ -54,6 +60,12 @@ export default {
       },
       immediate: true,
     },
+  },
+  mounted() {
+    window.addEventListener('resize', this.resizeNav);
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.resizeNav);
   },
 };
 </script>
