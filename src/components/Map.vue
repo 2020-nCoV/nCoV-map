@@ -1,6 +1,6 @@
 <template>
   <div class='map-wrapper'>
-    <h1>{{ msg }}</h1>
+    <!-- <div>{{provinceData}}</div> -->
     <div
     id='myChart'
     :style='style'
@@ -31,9 +31,7 @@ const pinMax = 100;
 const pinMin = 30;
 export default {
   name: 'Map',
-  props: {
-    msg: String,
-  },
+  props: ['mapData'],
   data() {
     return {
       style: { width: '100%', height: `${window.innerHeight - 20}px` },
@@ -96,8 +94,8 @@ export default {
       this.$echarts.registerMap(mapName, chinaJson, {});
       this.echartsInstance.setOption({
         title: {
-          text: `${provinceData.date} 疫情地图`,
-          subtext: `更新于 ${provinceData.date} 00:09`,
+          text: '2020.01.01 疫情地图',
+          subtext: '更新于 2020.01.01 00:09',
           x: 'center',
           y: '60',
           textStyle: {
@@ -158,7 +156,7 @@ export default {
             coordinateSystem: 'geo',
             data: this.convertProvinceDataWithCp(provinceData.data),
             symbol: 'pin',
-            symbolSize(val) {
+            symbolSize: (val) => {
               max = provinceData.data.map(item => item.value).sort((a, b) => a - b).pop();
               const d = (pinMax - pinMin) / (max - min);
               return pinMax - (max - val[2]) * d;
