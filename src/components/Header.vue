@@ -10,6 +10,7 @@
 <style lang="stylus">
 .logo-wrapper
   text-align: left
+  padding-left: 20px
 
 .sidebar-button
   position: relative

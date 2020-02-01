@@ -1,23 +1,17 @@
 <template>
   <div id="app">
-    <el-container>
-      <el-header>
-        <Header/>
-      </el-header>
-      <el-container>
-        <el-aside width="200px">
-          <Nav/>
-        </el-aside>
-        <el-container>
-          <el-main>
-            <router-view/>
-          </el-main>
-          <el-footer>
-            <Footer/>
-          </el-footer>
-        </el-container>
-      </el-container>
-    </el-container>
+    <div class='header'>
+      <Header/>
+    </div>
+    <div class='aside'>
+      <Nav/>
+    </div>
+    <div class='main'>
+      <router-view/>
+    </div>
+    <div class='footer'>
+      <Footer/>
+    </div>
   </div>
 </template>
 
@@ -47,18 +41,27 @@ export default {
   text-align center
   color #2c3e50
 
-.el-header {
+.header
+  position: fixed;
   line-height: 60px;
-}
 
-.el-footer {
-  line-height: 60px;
-}
-
-.el-aside
-  padding-top: 20px;
+.aside
+  position: fixed;
+  z-index: 9;
+  top: 80px;
   text-align: center;
   height: 100%;
+  overflow: auto;
+
+.main
+  width: 100%
+  height: 100%
+
+.footer
+  position: fixed;
+  left: 50%;
+  margin-left: -12px;
+  font-size: 12px;
 
 @media (max-width:719px) {
   .app-title {

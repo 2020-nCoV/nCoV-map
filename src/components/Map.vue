@@ -36,16 +36,20 @@ export default {
   },
   data() {
     return {
-      style: { width: '100%', height: `${window.innerHeight - 120}px` },
+      style: { width: '100%', height: `${window.innerHeight - 20}px` },
     };
+  },
+  computed: {
+    echartsInstance() {
+      return this.$echarts.init(document.getElementById('myChart'));
+    },
   },
   methods: {
     resizeChart() {
-      this.style.height = `${window.innerHeight - 120}px`;
-      return _.throttle(this.getEchartsInstance().resize(), 400);
-    },
-    getEchartsInstance() {
-      return this.$echarts.init(document.getElementById('myChart'));
+      return _.throttle(() => {
+        this.style.height = `${window.innerHeight - 20}px`;
+        this.echartsInstance.resize();
+      }, 400);
     },
     getGeoCoordMap(featuresData) {
       // {"天津": [117.190182, 39.125596]}
@@ -90,13 +94,22 @@ export default {
     drawMap() {
       const mapName = 'china';
       this.$echarts.registerMap(mapName, chinaJson, {});
-      this.getEchartsInstance().setOption({
+      this.echartsInstance.setOption({
         title: {
           text: `${provinceData.date} 疫情地图`,
-          left: '40%',
-          top: 'left',
+          subtext: `更新于 ${provinceData.date} 00:09`,
+          x: 'center',
+          y: '60',
           textStyle: {
             fontWeight: 'normal',
+          },
+        },
+        toolbox: {
+          show: true,
+          x: 'center',
+          y: 'bottom',
+          feature: {
+            saveAsImage: {},
           },
         },
         visualMap: {
@@ -104,8 +117,8 @@ export default {
           show: true,
           min: 0,
           max: 200000,
-          left: 'left',
-          top: 'bottom',
+          left: '200',
+          bobttom: '60',
           calculable: true,
           seriesIndex: [1],
           categories: [LEVE_1, LEVE_2, LEVE_3, LEVE_4, LEVE_5],
@@ -147,7 +160,6 @@ export default {
             symbol: 'pin',
             symbolSize(val) {
               max = provinceData.data.map(item => item.value).sort((a, b) => a - b).pop();
-              console.log(max);
               const d = (pinMax - pinMin) / (max - min);
               return pinMax - (max - val[2]) * d;
             },
@@ -176,6 +188,16 @@ export default {
             map: mapName,
             geoIndex: 0,
             data: this.convertProvinceData(provinceData.data),
+            aspectScale: 0.75,
+            zoom: 1,
+            left: 0,
+            top: 0,
+            right: 0,
+            bottom: 0,
+            boundingCoords: [
+              [-180, 90],
+              [180, -90],
+            ],
             itemStyle: {
               normal: {
                 label: {
@@ -194,10 +216,10 @@ export default {
   },
   mounted() {
     this.drawMap();
-    window.addEventListener('resize', this.resizeChart);
+    window.addEventListener('resize', this.resizeChart());
   },
   destroyed() {
-    window.removeEventListener('resize', this.resizeChart);
+    window.removeEventListener('resize', this.resizeChart());
   },
 };
 </script>

@@ -13,10 +13,12 @@
 </template>
 
 <script>
+import _ from 'lodash';
+
 export default {
   data() {
     return {
-      style: { height: `${window.innerHeight - 120}px` },
+      style: { height: `${window.innerHeight - 80}px` },
       defaultActive: '1',
       menus: [
         { name: '实时疫情', icon: 'el-icon-menu', value: 'situation' },
@@ -34,7 +36,9 @@ export default {
   },
   methods: {
     resizeNav() {
-      this.style.height = `${window.innerHeight - 120}px`;
+      return _.throttle(() => {
+        this.style.height = `${window.innerHeight - 80}px`;
+      });
     },
     handleSelect(index) {
       const path = this.menus[index - 1].value;
@@ -62,10 +66,10 @@ export default {
     },
   },
   mounted() {
-    window.addEventListener('resize', this.resizeNav);
+    window.addEventListener('resize', this.resizeNav());
   },
   destroyed() {
-    window.removeEventListener('resize', this.resizeNav);
+    window.removeEventListener('resize', this.resizeNav());
   },
 };
 </script>
