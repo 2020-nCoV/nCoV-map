@@ -49,6 +49,7 @@ setInterceptors = (instance, url) => {
     // todo: jump to offline page
       return -1;
     }
+    console.log(err);
     return Promise.reject(err);
   });
 }

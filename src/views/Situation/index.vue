@@ -22,7 +22,11 @@ export default {
     ...mapActions([types.SET_PROVINCEDATA]),
   },
   mounted() {
-    this[types.SET_PROVINCEDATA]();
+    try {
+      this[types.SET_PROVINCEDATA]();
+    } catch (e) {
+      throw new Error();
+    }
   },
 };
 </script>

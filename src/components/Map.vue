@@ -1,6 +1,5 @@
 <template>
   <div class='map-wrapper'>
-    <!-- <div>{{provinceData}}</div> -->
     <div
     id='myChart'
     :style='style'
@@ -40,6 +39,15 @@ export default {
   computed: {
     echartsInstance() {
       return this.$echarts.init(document.getElementById('myChart'));
+    },
+  },
+  watch: {
+    mapData(newData) {
+      if (newData) {
+        this.drawMap(newData);
+      } else {
+        this.drawMap(provinceData.data);
+      }
     },
   },
   methods: {
@@ -89,7 +97,7 @@ export default {
       }
       return newData;
     },
-    drawMap() {
+    drawMap(data) {
       const mapName = 'china';
       this.$echarts.registerMap(mapName, chinaJson, {});
       this.echartsInstance.setOption({
@@ -154,10 +162,10 @@ export default {
             name: '气泡',
             type: 'scatter',
             coordinateSystem: 'geo',
-            data: this.convertProvinceDataWithCp(provinceData.data),
+            data: this.convertProvinceDataWithCp(data),
             symbol: 'pin',
             symbolSize: (val) => {
-              max = provinceData.data.map(item => item.value).sort((a, b) => a - b).pop();
+              max = data.map(item => item.value).sort((a, b) => a - b).pop();
               const d = (pinMax - pinMin) / (max - min);
               return pinMax - (max - val[2]) * d;
             },
@@ -185,7 +193,7 @@ export default {
             type: 'map',
             map: mapName,
             geoIndex: 0,
-            data: this.convertProvinceData(provinceData.data),
+            data: this.convertProvinceData(data),
             aspectScale: 0.75,
             zoom: 1,
             left: 0,
@@ -213,7 +221,7 @@ export default {
     },
   },
   mounted() {
-    this.drawMap();
+    this.drawMap(this.mapData || provinceData.data);
     window.addEventListener('resize', this.resizeChart());
   },
   destroyed() {
