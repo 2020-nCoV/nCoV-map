@@ -1,5 +1,8 @@
 # coronavirus-map
 
+[开发文档](/docs/developGuide.md)
+[需求文档](/docs/requirements.md)
+
 ## Project setup
 ```
 npm install
