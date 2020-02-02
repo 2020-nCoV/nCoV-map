@@ -8,6 +8,7 @@
     </div>
     <div class='main'>
       <router-view/>
+      <MapBox/>
     </div>
     <div class='footer'>
       <Footer/>
@@ -19,12 +20,14 @@
 import Header from './components/Header.vue';
 import Footer from './components/Footer.vue';
 import Nav from './components/Nav.vue';
+import MapBox from './components/MapBox.vue';
 
 export default {
   components: {
     Header,
     Footer,
     Nav,
+    MapBox,
   },
 };
 </script>
