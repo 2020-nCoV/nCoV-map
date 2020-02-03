@@ -2,6 +2,15 @@
 
 ## 技术栈
 vue 全家桶
+mapv
+Openlayers
+leaflet
+Mapbox
+Echarts
+
+## 后期采用
+Cesium
+
 
 ## 开发环境
 node >= 10
