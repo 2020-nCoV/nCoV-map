@@ -1,7 +1,10 @@
 # coronavirus-map
 
-[开发文档](/docs/developGuide.md)
-[需求文档](/docs/requirements.md)
+- [协作流程](/docs/teamworkFlow.md)
+
+- [开发指南](/docs/developGuide.md)  
+
+- [需求文档](/docs/requirements.md)
 
 ## Project setup
 ```
