@@ -47,6 +47,7 @@ export default {
 .header
   position: fixed;
   line-height: 60px;
+  z-index: 9;
 
 .aside
   position: fixed;
@@ -65,6 +66,12 @@ export default {
   left: 50%;
   margin-left: -12px;
   font-size: 12px;
+
+.subtitle
+  position: absolute
+  bottom: 4px
+  right: 4px
+  font-size: 12px
 
 @media (max-width:719px) {
   .app-title {
