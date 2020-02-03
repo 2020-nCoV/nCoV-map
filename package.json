@@ -17,6 +17,7 @@
     "core-js": "^3.4.4",
     "echarts": "^4.6.0",
     "element-ui": "^2.13.0",
+    "leaflet": "^1.6.0",
     "lodash": "^4.17.15",
     "mapbox-gl": "^1.7.0",
     "vue": "^2.6.10",

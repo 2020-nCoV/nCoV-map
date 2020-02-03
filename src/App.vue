@@ -9,6 +9,7 @@
     <div class='main'>
       <router-view/>
       <MapBox/>
+      <LeafletMap />
     </div>
     <div class='footer'>
       <Footer/>
@@ -21,6 +22,7 @@ import Header from './components/Header.vue';
 import Footer from './components/Footer.vue';
 import Nav from './components/Nav.vue';
 import MapBox from './components/MapBox.vue';
+import LeafletMap from './components/LeafletMap.vue';
 
 export default {
   components: {
@@ -28,6 +30,7 @@ export default {
     Footer,
     Nav,
     MapBox,
+    LeafletMap,
   },
 };
 </script>
