@@ -1,5 +1,3 @@
 <template>
-    <h1>
-        时间序列分析
-    </h1>
+    <span class='subtitle'> 时间序列分析</span>
 </template>

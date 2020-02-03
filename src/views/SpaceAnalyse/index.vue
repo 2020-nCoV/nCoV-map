@@ -1,5 +1,3 @@
 <template>
-    <h1>
-        空间结构分析
-    </h1>
+    <span class='subtitle'> 空间结构分析</span>
 </template>

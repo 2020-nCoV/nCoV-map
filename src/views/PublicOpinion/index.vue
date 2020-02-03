@@ -1,5 +1,3 @@
 <template>
-    <h1>
-        舆情分析
-    </h1>
+    <span class='subtitle'>舆情分析</span>
 </template>

@@ -1,5 +1,3 @@
 <template>
-    <h1>
-        问卷分析
-    </h1>
+    <span class='subtitle'>问卷分析</span>
 </template>

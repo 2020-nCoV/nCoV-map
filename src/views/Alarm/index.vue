@@ -1,5 +1,3 @@
 <template>
-    <h1>
-        预警分析
-    </h1>
+    <span class='subtitle'> 预警分析</span>
 </template>
