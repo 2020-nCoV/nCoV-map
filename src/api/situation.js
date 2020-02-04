@@ -6,4 +6,8 @@ export const fetchData = options => axios.request({
 }).catch((e) => {
   console.log(e);
 });
+
+export const getAllGeo = () => axios.request({
+  url: 'https://geo.datav.aliyun.com/areas/bound/100000.json',
+});
 export default {};
