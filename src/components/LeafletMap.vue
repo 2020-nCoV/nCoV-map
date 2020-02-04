@@ -8,7 +8,6 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import axios from 'axios';
 import chinaJson from '../assets/maps/100000_full.json';
-// import provinceData from '../assets/data/20200201';
 
 const LEVEL_1 = '1000';
 const LEVEL_2 = '500';
@@ -21,8 +20,6 @@ const COLOR_LEVEL_3 = '#FF7B69';
 const COLOR_LEVEL_4 = '#FFAA85';
 const COLOR_LEVEL_5 = '#FFEDCC';
 
-// const CHINA_ADCODE = '100000_full';
-// const CHINA_OUTLINE_ADCODE = '100000';
 const PROVINCE_ADCODES = [
   '110000', '120000', '130000', '130000', '140000', '150000', '210000', '220000', '230000',
   '310000', '320000', '330000', '330000', '340000', '350000', '360000', '370000',
@@ -49,7 +46,7 @@ export default {
         fillOpacity: 0,
       },
       areaStat: null,
-      isCityLevelView: false,
+      isCityLevelView: true,
     };
   },
   methods: {
@@ -67,10 +64,10 @@ export default {
 
       this.map = L.map('mapapp', opt);
       this.addTileBaseMap();
+      // 双击展示市级数据
       this.map.on('dblclick', () => {
-        // if (this.isCityLevelView) this.addProvincesMap();
-        // else
-        this.addCitysMap();
+        if (this.isCityLevelView) this.addProvincesMap();
+        else this.addCitysMap();
       });
     },
     getColor(d) {
@@ -140,14 +137,14 @@ export default {
         data.forEach((item) => {
           // TODO: 市级匹配算法
           // 市、洲、自治州、盟等
-          name = this.isCityLevelView ? `${item.cityName}市` : item.provinceName;
-          if (prop.name === name) {
+          name = this.isCityLevelView ? item.cityName : item.provinceName || '';
+          if (prop.name.slice(0, 2) === name.slice(0, 2)) {
             // elem.properties.density = item.value;
-            prop.density = item.confirmedCount;
-            prop.confirmedCount = item.confirmedCount;
-            prop.suspectedCount = item.suspectedCount;
-            prop.deadCount = item.deadCount;
-            prop.curedCount = item.curedCount;
+            prop.density = item.confirmedCount || 0;
+            prop.confirmedCount = item.confirmedCount || 0;
+            prop.suspectedCount = item.suspectedCount || 0;
+            prop.deadCount = item.deadCount || 0;
+            prop.curedCount = item.curedCount || 0;
             if (item.cities) {
               prop.cities = item.cities;
             }
