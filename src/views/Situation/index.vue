@@ -7,7 +7,6 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex';
-// import Map from '../../components/Map.vue';
 import * as types from '../../store/actions-type';
 import Map from '@/components/LeafletMap.vue';
 
@@ -20,7 +19,7 @@ export default {
     ...mapState(['provinceData']),
   },
   methods: {
-    ...mapActions([types.SET_PROVINCEDATA]),
+    ...mapActions([types.SET_PROVINCEDATA, types.GET_GEO]),
   },
   mounted() {
     try {

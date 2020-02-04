@@ -20,7 +20,7 @@
 import Header from './components/Header.vue';
 import Footer from './components/Footer.vue';
 import Nav from './components/Nav.vue';
-// import MapBox from './components/MapBox.vue';
+// import MapBox from './components/Mapbox.vue';
 
 export default {
   components: {

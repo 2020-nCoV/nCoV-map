@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "fix-memory-limit": "cross-env LIMIT=10240 increase-memory-limit"
   },
   "repository": {
     "type": "git",
@@ -15,6 +16,7 @@
     "axios": "^0.19.2",
     "copy-webpack-plugin": "^5.1.1",
     "core-js": "^3.4.4",
+    "cross-env": "^7.0.0",
     "echarts": "^4.6.0",
     "element-ui": "^2.13.0",
     "leaflet": "^1.6.0",
