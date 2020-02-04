@@ -10,78 +10,7 @@
 
 <script>
 import _ from 'lodash';
-// import ad110000 from '../assets/geojson/110000';
-// import ad120000 from '../assets/geojson/120000';
-// import ad130000 from '../assets/geojson/130000';
-// import ad140000 from '../assets/geojson/140000';
-// import ad150000 from '../assets/geojson/150000';
-// import ad210000 from '../assets/geojson/210000';
-// import ad220000 from '../assets/geojson/220000';
-// import ad230000 from '../assets/geojson/230000';
-// import ad310000 from '../assets/geojson/310000';
-// import ad320000 from '../assets/geojson/320000';
-// import ad330000 from '../assets/geojson/330000';
-// import ad340000 from '../assets/geojson/340000';
-// import ad350000 from '../assets/geojson/350000';
-// import ad360000 from '../assets/geojson/360000';
-// import ad370000 from '../assets/geojson/370000';
-// import ad410000 from '../assets/geojson/410000';
-// import ad420000 from '../assets/geojson/420000';
-// import ad430000 from '../assets/geojson/430000';
-// import ad440000 from '../assets/geojson/440000';
-// import ad450000 from '../assets/geojson/450000';
-// import ad460000 from '../assets/geojson/460000';
-// import ad500000 from '../assets/geojson/500000';
-// import ad510000 from '../assets/geojson/510000';
-// import ad520000 from '../assets/geojson/520000';
-// import ad530000 from '../assets/geojson/530000';
-// import ad540000 from '../assets/geojson/540000';
-// import ad610000 from '../assets/geojson/610000';
-// import ad620000 from '../assets/geojson/620000';
-// import ad630000 from '../assets/geojson/630000';
-// import ad640000 from '../assets/geojson/640000';
-// import ad650000 from '../assets/geojson/650000';
-// import ad710000 from '../assets/geojson/710000';
-// import ad810000 from '../assets/geojson/810000';
-// import ad820000 from '../assets/geojson/820000';
 import statData from '../assets/statData';
-
-// const codeGeoJsonMap = {
-//   ad110000,
-//   // ad120000,
-//   // ad130000,
-//   // ad140000,
-//   // ad150000,
-//   // ad210000,
-//   // ad220000,
-//   // ad230000,
-//   // ad310000,
-//   // ad320000,
-//   // ad330000,
-//   // ad340000,
-//   // ad350000,
-//   // ad360000,
-//   // ad370000,
-//   // ad410000,
-//   // ad420000,
-//   // ad430000,
-//   // ad440000,
-//   // ad450000,
-//   // ad460000,
-//   // ad500000,
-//   // ad510000,
-//   // ad520000,
-//   // ad530000,
-//   // ad540000,
-//   // ad610000,
-//   // ad620000,
-//   // ad630000,
-//   // ad640000,
-//   // ad650000,
-//   // ad710000,
-//   // ad810000,
-//   // ad820000,
-// };
 
 const adcodeMap = {
   北京市: 110000,
@@ -119,9 +48,8 @@ const adcodeMap = {
   香港特别行政区: 810000,
   澳门特别行政区: 820000,
 };
-
 const token = 'pk.eyJ1IjoiMTM1OTQzOTUxMzYiLCJhIjoiY2p6dWtrYTJ2MDZjYjNncGhicmQ5emNxaiJ9.vhAO6Rbm0OWX902bpp90pQ';
-const maxValue = 200;
+const maxValue = 250;
 export default {
   name: 'Map',
   props: ['mapData'],
@@ -180,7 +108,7 @@ export default {
               });
           });
         setTimeout(() => {
-          statData.forEach(({ provinceName, cities, locationId }) => {
+          statData.forEach(({ cities, locationId }) => {
             const expression = ['match', ['get', 'adcode']];
             cities.forEach((city) => {
               const red = (city.confirmedCount / maxValue);
@@ -189,20 +117,16 @@ export default {
             });
             expression.push('rgba(0,0,0,0)');
             if (expression.length < 4) return;
-            console.log('provinceName', provinceName);
-            console.log('expression', expression);
-            setTimeout(() => {
-              map.addLayer({
-                id: String(locationId),
-                type: 'fill',
-                source: String(locationId),
-                paint: {
-                  'fill-color': expression,
-                },
-              }, 'waterway-label');
-            }, 0);
+            map.addLayer({
+              id: String(locationId),
+              type: 'fill',
+              source: String(locationId),
+              paint: {
+                'fill-color': expression,
+              },
+            }, 'waterway-label');
           });
-        }, 5000);
+        }, 2000);
       });
 
       // const maxValue = 500;
