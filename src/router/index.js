@@ -4,7 +4,7 @@ import Alarm from '../views/Alarm/index.vue';
 import DriveAnalyse from '../views/DriveAnalyse/index.vue';
 import Migrate from '../views/Migrate/index.vue';
 import PublicOpinion from '../views/PublicOpinion/index.vue';
-import Question from '../views/Question/index.vue';
+import Question from '../views/Question/questionForm.vue';
 import Situation from '../views/Situation/index.vue';
 import SpaceAnalyse from '../views/SpaceAnalyse/index.vue';
 import Statistics from '../views/Statistics/index.vue';
