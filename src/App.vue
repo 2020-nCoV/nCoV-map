@@ -8,8 +8,7 @@
     </div>
     <div class='main'>
       <router-view/>
-      <MapBox/>
-      <LeafletMap />
+      <!-- <MapBox/> -->
     </div>
     <div class='footer'>
       <Footer/>
@@ -21,16 +20,14 @@
 import Header from './components/Header.vue';
 import Footer from './components/Footer.vue';
 import Nav from './components/Nav.vue';
-import MapBox from './components/MapBox.vue';
-import LeafletMap from './components/LeafletMap.vue';
+// import MapBox from './components/MapBox.vue';
 
 export default {
   components: {
     Header,
     Footer,
     Nav,
-    MapBox,
-    LeafletMap,
+    // MapBox,
   },
 };
 </script>
@@ -61,6 +58,10 @@ export default {
   overflow: auto;
 
 .main
+  position: fixed;
+  z-index: 9;
+  top: 80px;
+  left: 153px;
   width: 100%
   height: 100%
 

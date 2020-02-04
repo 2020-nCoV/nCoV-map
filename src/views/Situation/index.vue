@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div class="situation">
         <span class='subtitle'>实时疫情</span>
-        <!-- <Map :mapData='provinceData'/> -->
+        <Map :mapData='provinceData'/>
     </div>
 </template>
 
@@ -9,11 +9,12 @@
 import { createNamespacedHelpers } from 'vuex';
 // import Map from '../../components/Map.vue';
 import * as types from '../../store/actions-type';
+import Map from '@/components/LeafletMap.vue';
 
 const { mapActions, mapState } = createNamespacedHelpers('situation');
 export default {
   components: {
-    // Map,
+    Map,
   },
   computed: {
     ...mapState(['provinceData']),
@@ -30,3 +31,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.situation {
+  width: 100%;
+  height: 100%;
+}
+</style>

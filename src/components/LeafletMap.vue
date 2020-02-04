@@ -8,7 +8,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import axios from 'axios';
 import chinaJson from '../assets/maps/100000_full.json';
-import provinceData from '../assets/data/20200201';
+// import provinceData from '../assets/data/20200201';
 
 const LEVEL_1 = '1000';
 const LEVEL_2 = '500';
@@ -48,6 +48,8 @@ export default {
         color: '#414141',
         fillOpacity: 0,
       },
+      areaStat: null,
+      isCityLevelView: false,
     };
   },
   methods: {
@@ -65,6 +67,11 @@ export default {
 
       this.map = L.map('mapapp', opt);
       this.addTileBaseMap();
+      this.map.on('dblclick', () => {
+        // if (this.isCityLevelView) this.addProvincesMap();
+        // else
+        this.addCitysMap();
+      });
     },
     getColor(d) {
       let color = '#FFFFFF';
@@ -126,26 +133,109 @@ export default {
       });
     },
     injectDataToMap(features, data) {
+      let prop;
+      let name;
       features.forEach((elem) => {
+        prop = elem.properties;
         data.forEach((item) => {
-          if (elem.properties.name === item.name) {
-            elem.properties.density = item.value;
+          // TODO: 市级匹配算法
+          // 市、洲、自治州、盟等
+          name = this.isCityLevelView ? `${item.cityName}市` : item.provinceName;
+          if (prop.name === name) {
+            // elem.properties.density = item.value;
+            prop.density = item.confirmedCount;
+            prop.confirmedCount = item.confirmedCount;
+            prop.suspectedCount = item.suspectedCount;
+            prop.deadCount = item.deadCount;
+            prop.curedCount = item.curedCount;
+            if (item.cities) {
+              prop.cities = item.cities;
+            }
           }
         });
       });
     },
+    getProvinceName(adcode) {
+      const table = new Map();
+      const table2 = [
+        ['110000', '北京'],
+        ['120000', '天津'],
+        ['130000', '河北'],
+        ['140000', '山西'],
+        ['150000', '内蒙古'],
+        ['210000', '辽宁'],
+        ['220000', '吉林'],
+        ['230000', '黑龙江'],
+        ['310000', '上海'],
+        ['320000', '江苏'],
+        ['330000', '浙江'],
+        ['340000', '安徽'],
+        ['350000', '福建'],
+        ['360000', '江西'],
+        ['370000', '山东'],
+        ['410000', '河南'],
+        ['420000', '湖北'],
+        ['430000', '湖南'],
+        ['440000', '广东'],
+        ['450000', '广西'],
+        ['460000', '海南'],
+        ['500000', '重庆'],
+        ['510000', '四川'],
+        ['520000', '贵州'],
+        ['530000', '云南'],
+        ['540000', '西藏'],
+        ['610000', '陕西'],
+        ['620000', '甘肃'],
+        ['630000', '青海'],
+        ['640000', '宁夏'],
+        ['650000', '新疆'],
+        ['710000', '台湾'],
+        ['810000', '香港'],
+        ['820000', '澳门'],
+      ];
+      table2.forEach((e) => {
+        table.set(e[0], e[1]);
+      });
+      return table.get(adcode.toString());
+    },
+    bindPopup(layer) {
+      layer.eachLayer((lyr) => {
+        const props = lyr.feature.properties;
+        const epidemicInfo = `${props.name}:
+        确诊病例：${props.confirmedCount}
+        死亡病例：${props.deadCount}
+        治愈病例：${props.curedCount}
+        怀疑病例：${props.suspectedCount}
+        `;
+        lyr.bindPopup(epidemicInfo);
+      });
+    },
     addProvincesMap() {
-      this.injectDataToMap(chinaJson.features, provinceData.data);
-      this.provinceLayer = L.geoJSON(chinaJson.features, {
-        style: this.mapStyle,
-        onEachFeature: this.onEachFeature,
-      }).addTo(this.map);
+      this.isCityLevelView = false;
+
+      axios.get('/data.json').then((res) => {
+        if (res.data.ok) {
+          this.areaStat = res.data.data.getAreaStat;
+          this.injectDataToMap(chinaJson.features, this.areaStat);
+          this.provinceLayer = L.geoJSON(chinaJson.features, {
+            style: this.mapStyle,
+            onEachFeature: this.onEachFeature,
+          }).addTo(this.map);
+          this.bindPopup(this.provinceLayer);
+        }
+      });
     },
     addCitysMap() {
-      // console.log(chinaJson);
-      // console.log(provinceData);
-      // this.injectDataToMap(chinaJson.features, provinceData.data);
+      this.isCityLevelView = true;
+      this.map.removeLayer(this.provinceLayer);
+      const data = new Map();
 
+      this.areaStat.forEach((item) => {
+        data.set(
+          item.provinceShortName,
+          item.cities,
+        );
+      });
       const citysData = [];
       PROVINCE_ADCODES.forEach((adcode) => {
         citysData.push(axios(`/province/${adcode}_full.json`).then((res) => {
@@ -155,19 +245,24 @@ export default {
           return null;
         }));
       });
+      let provinceCode;
+      let provinceName;
       Promise.all(citysData).then((results) => {
-        console.log('all done', results);
-        results.forEach((city) => {
-          L.geoJSON(city.features, {
+        results.forEach((citys) => {
+          provinceCode = citys.features[0].properties.parent.adcode;
+          provinceName = this.getProvinceName(provinceCode);
+          this.injectDataToMap(citys.features, data.get(provinceName));
+          const cityLayer = L.geoJSON(citys.features, {
             style: this.mapStyle,
             onEachFeature: this.onEachFeature,
           }).addTo(this.map);
+          this.bindPopup(cityLayer);
         });
       });
     },
     loadData() {
-      // this.addProvincesMap();
-      this.addCitysMap();
+      this.addProvincesMap();
+      // this.addCitysMap();
     },
   },
   mounted() {
@@ -178,13 +273,10 @@ export default {
 </script>
 
 <style scoped>
-/* 整体 map 样式 */
+/* 地图容器 */
 #mapapp {
   background: #ffffff;
-  position: absolute;
-  height: 560px;
   width: 100%;
-  margin-left: 153px;
-  top: 53px;
+  height: 100%;
 }
 </style>
