@@ -70,10 +70,12 @@ export default {
       });
     },
     drawMap(mapData) {
-      this.prepare(mapData);
       if (this.allLayer.length !== 0) {
         this.removeAllLayer();
       }
+
+      this.prepare(mapData);
+
       if (this.infectionLayers.length !== 0) {
         this.addAllLayer();
       }
@@ -84,16 +86,10 @@ export default {
       this.mapApp.addControl(new MapboxLanguage());
     },
     prepare(mapData) {
-      const sum = [];
-      // TODO: 分层设色算法
-
       mapData.forEach(({ cities, locationId }) => {
         this.allLayer.push(locationId);
         const colorExp = ['match', ['get', 'adcode']];
         cities.forEach((city) => {
-          sum.push(city.confirmedCount);
-          // const red = (city.confirmedCount / MAX_VALUE) * 100;
-          // const color = `rgba(255, 0, 0, ${red})`;
           const color = this.getColor(city.confirmedCount);
           colorExp.push(city.locationId, color);
         });
