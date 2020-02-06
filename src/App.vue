@@ -58,10 +58,6 @@ export default {
   overflow: auto;
 
 .main
-  position: fixed;
-  z-index: 9;
-  top: 80px;
-  left: 153px;
   width: 100%
   height: 100%
 
