@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div>
     <div class='header'>
       <Header/>
     </div>
@@ -32,7 +32,7 @@ export default {
 };
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 *
   margin: 0
   padding: 0
