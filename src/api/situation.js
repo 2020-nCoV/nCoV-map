@@ -4,7 +4,7 @@ export const fetchData = options => axios.request({
   ...options,
   url: '/data',
 }).catch((e) => {
-  console.log(e);
+  throw new Error(e);
 });
 
 export const getAllGeo = () => axios.request({

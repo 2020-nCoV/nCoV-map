@@ -59,38 +59,16 @@ export default {
 
 .main
   position: fixed;
-  z-index: 9;
-  top: 80px;
-  left: 153px;
+  top: 0;
+  left: 0;
   width: 100%
   height: 100%
 
 .footer
   position: fixed;
   left: 50%;
+  bottom: 4px;
   margin-left: -12px;
   font-size: 12px;
-
-.subtitle
-  position: absolute
-  bottom: 4px
-  right: 4px
-  font-size: 12px
-
-@media (max-width:719px) {
-  .app-title {
-    font-size: 18px
-    font-weight: 800
-    margin-left: 10px
-  }
-
-  .logo {
-    display: none
-  }
-
-  .sidebar-button {
-      display: inline-block;
-  }
-}
 
 </style>

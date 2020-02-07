@@ -6,6 +6,7 @@ import * as echarts from 'echarts';
 import mapbox from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './assets/index.css';
+import './theme/style.css';
 import App from './index.vue';
 import router from './router';
 import store from './store';
@@ -16,18 +17,22 @@ Vue.prototype.$mapbox = mapbox;
 
 Vue.config.productionTip = false;
 router.beforeEach((to, from, next) => {
-  if (to.path === '/login') {
-    localStorage.removeItem('token');
-  }
+  const { isLogin } = store.state;
+  // if (to.path === '/login') {
+  //   localStorage.removeItem('token');
+  // }
   // let token = localStorage.getItem('token');
-  const outtime = false;
+  // const outtime = false;
   // if (token) {
   //   // 如果token失效，outtime设为true
   // } else {
   //
   // }
-  if (outtime && to.path !== '/login') {
-    next({ path: '/login' });
+  if (!isLogin && to.meta.needLogin) {
+    router.replace({
+      path: '/login',
+      query: { redirect: to.path },
+    });
   } else {
     next();
   }
