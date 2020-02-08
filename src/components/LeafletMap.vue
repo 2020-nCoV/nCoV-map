@@ -234,8 +234,10 @@ export default {
         );
       });
       const citysData = [];
+      const { origin } = window.location;
+
       PROVINCE_ADCODES.forEach((adcode) => {
-        citysData.push(axios(`/province/${adcode}_full.json`).then((res) => {
+        citysData.push(axios.request({ url: `${origin}/assets/geojson/${adcode}.json` }).then((res) => {
           if (res.status === 200) {
             return res.data;
           }
