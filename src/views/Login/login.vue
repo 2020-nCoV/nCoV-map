@@ -5,13 +5,12 @@
     </div>
     <div class="main">
       <div class="login_container">
-        <bubbles-effect :options="options"></bubbles-effect>
         <el-form ref="form" :model="form" label-width="10px" class="login_form">
           <el-container>
             <el-image
             style="width: 50px; height: 50px;display:block;margin: 0 auto"
             :src="logo"
-            :fit="fit">
+            >
             </el-image>
           </el-container>
           <el-form-item style="margin-top: 10px">
@@ -38,6 +37,7 @@
 </div>
 </template>
 <script>
+import * as types from '../../store/actions-type';
 import Footer from './componennts/footer.vue';
 import Header from './componennts/header.vue';
 
@@ -63,9 +63,16 @@ export default {
       });
     },
     login() {
-      this.$router.push({
-        path: '/situation',
-      });
+      this.$store.commit(types.SET_ISLOGIN, true);
+      if (this.$router.history.current.query && this.$router.history.current.query.redirect) {
+        this.$router.replace({
+          path: decodeURIComponent(this.$router.history.current.query.redirect),
+        });
+      } else {
+        this.$router.replace({
+          path: '/',
+        });
+      }
     },
   },
 };

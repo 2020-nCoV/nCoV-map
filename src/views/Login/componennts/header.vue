@@ -12,7 +12,7 @@
         </el-input></div></el-col>
         <el-col :span="12"><div class="about_us">
           <i class="el-icon-share"></i>
-          <Typography style="margin-left: 5px">关于我们</Typography>
+          <span style="margin-left: 5px">关于我们</span>
         </div></el-col>
       </div></el-col>
     </el-row>
