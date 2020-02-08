@@ -6,8 +6,7 @@
     </div>
 </template>
 
-
-<style lang="stylus">
+<style lang="stylus" scoped>
 .logo-wrapper
   text-align: left
   padding-left: 20px
@@ -35,4 +34,20 @@
   font-size: 24px
   font-weight: 800
   margin-left: 5px
+
+@media (max-width:719px) {
+  .app-title {
+    font-size: 18px
+    font-weight: 800
+    margin-left: 10px
+  }
+
+  .logo {
+    display: none
+  }
+
+  .sidebar-button {
+      display: inline-block;
+  }
+}
 </style>

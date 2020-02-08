@@ -4,7 +4,7 @@
   <el-image
     style="width: 190px; height: 18px;display:block;margin: 0 auto"
     :src="divider"
-    :fit="fit">
+    >
   </el-image>
   <el-row style="margin-top: 10px">
     <el-col :span="8">
@@ -13,7 +13,7 @@
           <el-image
             style="width: 36px; height: 36px;display: inline-block;vertical-align: middle"
             :src="title1"
-            :fit="fit">
+            >
           </el-image>
           <span style="display: inline-block;margin-left: 5px;margin-top: -5px">项目方向</span>
         </div>
@@ -26,7 +26,7 @@
         <el-image
           style="width: 36px; height: 36px;display: inline-block;vertical-align: middle"
           :src="title2"
-          :fit="fit">
+          >
         </el-image>
         <span style="display: inline-block;margin-left: 5px;margin-top: -5px">关于我们</span>
       </div>
@@ -37,7 +37,7 @@
         <el-image
           style="width: 36px; height: 36px;display: inline-block;vertical-align: middle"
           :src="title3"
-          :fit="fit">
+          >
         </el-image>
         <span style="display: inline-block;margin-left: 5px;margin-top: -5px">技术支持</span>
       </div>

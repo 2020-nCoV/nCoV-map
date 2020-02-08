@@ -6,13 +6,12 @@
     </div>
     <div class="main">
       <div class="register_container">
-        <bubbles-effect :options="options"></bubbles-effect>
         <el-form ref="form" :model="form" label-width="10px" class="register_form">
           <el-container>
             <el-image
               style="width: 50px; height: 50px;display:block;margin: 0 auto"
               :src="logo"
-              :fit="fit">
+              >
             </el-image>
           </el-container>
           <el-form-item style="margin-top: 10px">

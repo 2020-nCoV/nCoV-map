@@ -6,7 +6,8 @@
 
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import axios from 'axios';
+import axios from '@/utils/http';
+
 import chinaJson from '../assets/maps/100000_full.json';
 
 const LEVEL_1 = '1000';
@@ -125,7 +126,7 @@ export default {
     },
     getData(url) {
       return new Promise((resolve) => {
-        const res = axios.get(url);
+        const res = axios.request({ url });
         resolve(res);
       });
     },
@@ -210,7 +211,7 @@ export default {
     addProvincesMap() {
       this.isCityLevelView = false;
 
-      axios.get('/data.json').then((res) => {
+      axios.request({ url: '/data.json' }).then((res) => {
         if (res.data.ok) {
           this.areaStat = res.data.data.getAreaStat;
           this.injectDataToMap(chinaJson.features, this.areaStat);

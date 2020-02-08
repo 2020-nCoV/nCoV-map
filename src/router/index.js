@@ -1,152 +1,91 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Alarm from '../views/Alarm/index.vue';
-import DriveAnalyse from '../views/DriveAnalyse/index.vue';
-import Migrate from '../views/Migrate/index.vue';
-import PublicOpinion from '../views/PublicOpinion/index.vue';
-import Question from '../views/Question/index.vue';
 import Situation from '../views/Situation/index.vue';
-import SpaceAnalyse from '../views/SpaceAnalyse/index.vue';
-import Statistics from '../views/Statistics/index.vue';
-import Support from '../views/Support/index.vue';
-import TimeAnalyse from '../views/TimeAnalyse/index.vue';
-import Login from '../views/Login/login.vue';
-import Register from '../views/Login/register.vue';
 import Main from '../App.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
   {
+    path: '/',
+    component: Main,
+    children: [
+      {
+        path: '/',
+        redirect: '/situation',
+      },
+      {
+        path: '/situation',
+        name: 'situation',
+        component: Situation,
+      },
+      {
+        path: '/support',
+        name: 'support',
+        component: () => import(/* webpackChunkName: "support" */ '../views/Support/index.vue'),
+      },
+      {
+        path: '/migrate',
+        name: 'migrate',
+        component: () => import(/* webpackChunkName: "migrate" */ '../views/Migrate/index.vue'),
+      },
+      {
+        path: '/time-analyse',
+        name: 'timeAnalyse',
+        component: () => import(/* webpackChunkName: "timeAnalyse" */ '../views/TimeAnalyse/index.vue'),
+      },
+      {
+        path: '/space-analyse',
+        name: 'spaceAnalyse',
+        component: () => import(/* webpackChunkName: "spaceAnalyse" */ '../views/SpaceAnalyse/index.vue'),
+      },
+      {
+        path: '/drive-analyse',
+        name: 'driveAnalyse',
+        component: () => import(/* webpackChunkName: "driveAnalyse" */ '../views/DriveAnalyse/index.vue'),
+      },
+      {
+        path: '/public-opinion',
+        name: 'publicOpinion',
+        component: () => import(/* webpackChunkName: "publicOpinion" */ '../views/PublicOpinion/index.vue'),
+      },
+      {
+        path: '/question',
+        name: 'question',
+        component: () => import(/* webpackChunkName: "question" */ '../views/Question/index.vue'),
+      },
+      {
+        path: '/statistics',
+        name: 'statistics',
+        component: () => import(/* webpackChunkName: "statistics" */ '../views/Statistics/index.vue'),
+      },
+      {
+        path: '/alarm',
+        name: 'alarm',
+        component: () => import(/* webpackChunkName: "alarm" */ '../views/Alarm/index.vue'),
+        meta: {
+          needLogin: true,
+        },
+      },
+    ],
+  },
+  {
     path: '/login',
     name: 'login',
-    component: Login,
-    hidden: true,
+    component: () => import(/* webpackChunkName: "login" */ '../views/Login/login.vue'),
   },
   {
     path: '/register',
     name: 'register',
-    component: Register,
-    hidden: true,
+    component: () => import(/* webpackChunkName: "register" */ '../views/Login/register.vue'),
   },
   {
-    path: '/',
-    component: Main,
-    children: [
-      { path: '/situation', component: Situation, name: 'Table' },
-    ],
-  },
-  {
-    path: '/',
-    component: Main,
-    children: [{
-      path: '/',
-      name: 'situation',
-      component: Situation,
-    }],
-
-  },
-  {
-    path: '/',
-    component: Main,
-    children: [{
-      path: '/situation',
-      name: 'situation',
-      component: Situation,
-    }],
-  },
-  {
-    path: '/',
-    component: Main,
-    children: [{
-      path: '/support',
-      name: 'support',
-      component: Support,
-    }],
-  },
-  {
-    path: '/',
-    component: Main,
-    children: [{
-      path: '/migrate',
-      name: 'migrate',
-      component: Migrate,
-    }],
-  },
-  {
-    path: '/',
-    component: Main,
-    children: [{
-      path: '/time-analyse',
-      name: 'timeAnalyse',
-      component: TimeAnalyse,
-    }],
-  },
-  {
-    path: '/',
-    component: Main,
-    children: [{
-      path: '/space-analyse',
-      name: 'spaceAnalyse',
-      component: SpaceAnalyse,
-    }],
-  },
-  {
-    path: '/',
-    component: Main,
-    children: [{
-      path: '/drive-analyse',
-      name: 'driveAnalyse',
-      component: DriveAnalyse,
-    }],
-  },
-  {
-    path: '/',
-    component: Main,
-    children: [{
-      path: '/public-opinion',
-      name: 'publicOpinion',
-      component: PublicOpinion,
-    }],
-  },
-  {
-    path: '/',
-    component: Main,
-    children: [{
-      path: '/question',
-      name: 'question',
-      component: Question,
-    }],
-  },
-  {
-    path: '/',
-    component: Main,
-    children: [{
-      path: '/statistics',
-      name: 'statistics',
-      component: Statistics,
-    }],
-  },
-  {
-    path: '/',
-    component: Main,
-    children: [{
-      path: '/alarm',
-      name: 'alarm',
-      component: Alarm,
-    }],
-  },
-  {
-    path: '/',
-    component: Main,
-    children: [{
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
-    }],
+    path: '/about',
+    name: 'about',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
   },
 ];
 

@@ -42,8 +42,8 @@ export default {
     },
     handleSelect(index) {
       const path = this.menus[index - 1].value;
-      this.$router.push(path).catch((e) => {
-        if (e.name !== 'NavigationDuplicated') { throw new Error(e); }
+      this.$router.push(path).catch(() => {
+        // if (e.name !== 'NavigationDuplicated') { throw new Error(e); }
       });
     },
     getIndexOfPath(path) {
