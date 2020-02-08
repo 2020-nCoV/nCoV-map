@@ -27,6 +27,7 @@ const COLOR_LEVEL_2 = 'rgba(255,0,0,0.7)'; // '#BF2121';
 const COLOR_LEVEL_3 = 'rgba(255,0,0,0.5)'; // '#FF7B69';
 const COLOR_LEVEL_4 = 'rgba(255,0,0,0.25)'; // '#FFAA85';
 const COLOR_LEVEL_5 = 'rgba(255,0,0,0.2)'; // '#FFEDCC';
+const COLOR_EMPTY = 'rgba(255, 255, 255, 0.5)';
 
 export default {
   name: 'InfectionMap',
@@ -70,10 +71,9 @@ export default {
       });
     },
     drawMap(mapData) {
-      if (this.allLayer.length !== 0) {
-        this.removeAllLayer();
-      }
-
+      // if (this.allLayer.length !== 0) {
+      //   this.removeAllLayer();
+      // }
       this.prepare(mapData);
 
       if (this.infectionLayers.length !== 0) {
@@ -86,12 +86,13 @@ export default {
       this.mapApp.addControl(new MapboxLanguage());
     },
     prepare(mapData) {
+      this.infectionLayers = [];
       mapData.forEach(({ cities, locationId }) => {
         this.allLayer.push(locationId);
         const colorExp = ['match', ['get', 'adcode']];
         cities.forEach((city) => {
           const color = this.getColor(city.confirmedCount);
-          colorExp.push(city.locationId, color);
+          if (city.locationId !== 0) colorExp.push(city.locationId, color);
         });
         colorExp.push('rgba(255,0,0,0.1)');
 
@@ -131,7 +132,7 @@ export default {
       this.drawMap(this.mapData.getAreaStat || statData);
     },
     getColor(d) {
-      let color = '#FFFFFF';
+      let color = COLOR_EMPTY;
       if (d > LEVEL_1) {
         color = COLOR_LEVEL_1;
       } else if (d > LEVEL_2) {
@@ -148,10 +149,8 @@ export default {
   },
   watch: {
     mapData(newData) {
-      if (newData) {
+      if (newData && this.mapApp.isStyleLoaded()) {
         this.drawMap(newData.getAreaStat);
-      } else {
-        this.drawMap(statData);
       }
     },
   },
