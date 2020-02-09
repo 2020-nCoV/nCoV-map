@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div>
     <div class='header'>
       <Header/>
     </div>
@@ -8,7 +8,7 @@
     </div>
     <div class='main'>
       <router-view/>
-      <MapBox/>
+      <!-- <MapBox/> -->
     </div>
     <div class='footer'>
       <Footer/>
@@ -20,19 +20,19 @@
 import Header from './components/Header.vue';
 import Footer from './components/Footer.vue';
 import Nav from './components/Nav.vue';
-import MapBox from './components/MapBox.vue';
+// import MapBox from './components/Mapbox.vue';
 
 export default {
   components: {
     Header,
     Footer,
     Nav,
-    MapBox,
+    // MapBox,
   },
 };
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 *
   margin: 0
   padding: 0
@@ -58,35 +58,17 @@ export default {
   overflow: auto;
 
 .main
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%
   height: 100%
 
 .footer
   position: fixed;
   left: 50%;
+  bottom: 4px;
   margin-left: -12px;
   font-size: 12px;
-
-.subtitle
-  position: absolute
-  bottom: 4px
-  right: 4px
-  font-size: 12px
-
-@media (max-width:719px) {
-  .app-title {
-    font-size: 18px
-    font-weight: 800
-    margin-left: 10px
-  }
-
-  .logo {
-    display: none
-  }
-
-  .sidebar-button {
-      display: inline-block;
-  }
-}
 
 </style>
