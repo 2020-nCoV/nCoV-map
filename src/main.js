@@ -5,7 +5,7 @@ import locale from 'element-ui/lib/locale/lang/en';
 import * as echarts from 'echarts';
 import mapbox from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import './assets/index.css';
+import './assets/theme/index.css';
 import './theme/style.css';
 import App from './index.vue';
 import router from './router';

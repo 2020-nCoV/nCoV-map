@@ -8,7 +8,7 @@
 <script>
 import { createNamespacedHelpers } from 'vuex';
 import * as types from '../../store/actions-type';
-import Map from '@/components/LeafletMap.vue';
+import Map from '@/components/InfectionMap.vue';
 
 const { mapActions, mapState } = createNamespacedHelpers('situation');
 export default {
