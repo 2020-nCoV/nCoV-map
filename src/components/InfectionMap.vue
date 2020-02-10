@@ -12,22 +12,26 @@ import statData from '@/assets/statData';
 import axios from '@/utils/http';
 
 const MAP_TOKEN = 'pk.eyJ1IjoiOTI0MTUyNjUxIiwiYSI6ImNrNjkwdXYwNjBhMzUzZHBtZHZqMHc1Y3QifQ.-ghyt3JdDn12Wk31yifDLw';
-const MAP_STYLE = 'mapbox://styles/mapbox/streets-v10';
+// const MAP_STYLE = 'mapbox://styles/mapbox/streets-v10';
+const MAP_STYLE = 'mapbox://styles/924152651/ck6fxwkee2suj1ikxyu487e64';
+
 const MAP_ZOOM = 3.1012459845601623;
 const MAP_CENTER = [106.90464586973894, 38.38927373581919];
 // const MAX_VALUE = 4109;
 
+const LEVEL_0 = '5000';
 const LEVEL_1 = '1000';
 const LEVEL_2 = '500';
 const LEVEL_3 = '100';
 const LEVEL_4 = '10';
-const LEVEL_5 = '1';
-const COLOR_LEVEL_1 = 'rgba(255,0,0,0.9)'; // '#7F1818';
-const COLOR_LEVEL_2 = 'rgba(255,0,0,0.7)'; // '#BF2121';
-const COLOR_LEVEL_3 = 'rgba(255,0,0,0.5)'; // '#FF7B69';
-const COLOR_LEVEL_4 = 'rgba(255,0,0,0.25)'; // '#FFAA85';
-const COLOR_LEVEL_5 = 'rgba(255,0,0,0.2)'; // '#FFEDCC';
-const COLOR_EMPTY = 'rgba(255, 255, 255, 0.5)';
+const LEVEL_5 = '0.9';
+const COLOR_LEVEL_0 = 'rgb(81,8,17)';
+const COLOR_LEVEL_1 = 'rgb(136,23,41)';
+const COLOR_LEVEL_2 = 'rgb(209,40,47)';
+const COLOR_LEVEL_3 = 'rgb(238,87,74)';
+const COLOR_LEVEL_4 = 'rgb(238,165,133)';
+const COLOR_LEVEL_5 = 'rgb(252,209,210)';
+const COLOR_EMPTY = 'rgb(219, 231, 229)';
 
 export default {
   name: 'InfectionMap',
@@ -94,7 +98,7 @@ export default {
           const color = this.getColor(city.confirmedCount);
           if (city.locationId !== 0) colorExp.push(city.locationId, color);
         });
-        colorExp.push('rgba(255,0,0,0.1)');
+        colorExp.push(COLOR_EMPTY);
 
         if (colorExp.length < 4) return;
         this.infectionLayers.push({
@@ -133,7 +137,9 @@ export default {
     },
     getColor(d) {
       let color = COLOR_EMPTY;
-      if (d > LEVEL_1) {
+      if (d > LEVEL_0) {
+        color = COLOR_LEVEL_0;
+      } else if (d > LEVEL_1) {
         color = COLOR_LEVEL_1;
       } else if (d > LEVEL_2) {
         color = COLOR_LEVEL_2;
