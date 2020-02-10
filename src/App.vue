@@ -3,9 +3,9 @@
     <div class='header'>
       <Header/>
     </div>
-    <div class='aside'>
+    <!-- <div class='aside'>
       <Nav/>
-    </div>
+    </div> -->
     <div class='main'>
       <router-view/>
       <!-- <MapBox/> -->
@@ -19,14 +19,14 @@
 <script>
 import Header from './components/Header.vue';
 import Footer from './components/Footer.vue';
-import Nav from './components/Nav.vue';
+// import Nav from './components/Nav.vue';
 // import MapBox from './components/Mapbox.vue';
 
 export default {
   components: {
     Header,
     Footer,
-    Nav,
+    // Nav,
     // MapBox,
   },
 };
@@ -46,16 +46,23 @@ export default {
 
 .header
   position: fixed;
-  line-height: 60px;
+  line-height: 40px;
   z-index: 9;
 
 .aside
+  display: block;
   position: fixed;
   z-index: 9;
-  top: 80px;
+  top: 70px;
   text-align: center;
   height: 100%;
   overflow: auto;
+
+@media (max-width 719px) {
+  .aside {
+    display: none;
+  }
+}
 
 .main
   position: fixed;
@@ -67,8 +74,9 @@ export default {
 .footer
   position: fixed;
   left: 50%;
-  bottom: 4px;
-  margin-left: -12px;
+  bottom: 1px;
+  margin-left: -50px;
   font-size: 12px;
+  color: #222;
 
 </style>
