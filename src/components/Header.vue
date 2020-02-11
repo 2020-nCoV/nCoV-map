@@ -2,14 +2,17 @@
     <div class='logo-wrapper'>
         <div class="sidebar-button"></div>
         <div class='logo'></div>
-        <div class='app-title'>nCov疫情大数据分析与预警平台</div>
+        <div class='app-title'>
+          nCoV疫情地图
+          <span style="font-size:12px; font-weight:400; color:#444;">-内测版</span>
+        </div>
     </div>
 </template>
 
 <style lang="stylus" scoped>
 .logo-wrapper
   text-align: left
-  padding-left: 20px
+  padding-left: 5px
 
 .sidebar-button
   position: relative
@@ -31,9 +34,8 @@
 
 .app-title
   display: inline-block
-  font-size: 24px
+  font-size: 18px
   font-weight: 800
-  margin-left: 5px
 
 @media (max-width:719px) {
   .app-title {

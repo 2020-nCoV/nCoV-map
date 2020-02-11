@@ -1,8 +1,20 @@
 
+.mapboxgl-canvas{
+	outline: none !important;
+}
+
 .subtitle {
     position: absolute;
     z-index: 9;
     bottom: 4px;
     right: 4px;
     font-size: 12px;
+}
+
+.todo {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 11;
+    background-color: yellow; 
 }

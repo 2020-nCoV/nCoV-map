@@ -1,5 +1,12 @@
 import axios from '@/utils/http';
 
+export const fetchInfectionData = options => axios.request({
+  ...options,
+  url: '/data',
+}).catch((e) => {
+  throw new Error(e);
+});
+
 export const fetchData = options => axios.request({
   ...options,
   url: '/data.json',

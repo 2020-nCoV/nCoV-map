@@ -18,7 +18,7 @@ import _ from 'lodash';
 export default {
   data() {
     return {
-      style: { height: `${window.innerHeight - 80}px` },
+      style: { overflow: 'scroll', height: `${window.innerHeight - 80}px` },
       defaultActive: '1',
       menus: [
         { name: '实时疫情', icon: 'el-icon-menu', value: 'situation' },
