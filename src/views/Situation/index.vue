@@ -1,42 +1,39 @@
 <template>
     <div class="situation">
-        <!-- <span class='subtitle'>实时疫情</span> -->
-        <TopNav></TopNav>
-        <Map :mapData='provinceData'/>
+        <span class='subtitle'>实时疫情</span>
+        <!-- <Map :mapData='provinceData'/> -->
+        <div class='todo'>TODO： 实时疫情打点展示 以及 疫情数据图表展示</div>
     </div>
 </template>
 
 <script>
 import { createNamespacedHelpers } from 'vuex';
 import * as types from '../../store/actions-type';
-import Map from '@/components/InfectionMap.vue';
-import TopNav from '@/components/TopNav.vue';
+// import Map from '@/components/InfectionMap.vue';
+import statData from '@/assets/statData';
 
-const { mapActions, mapState } = createNamespacedHelpers('situation');
+const { mapActions } = createNamespacedHelpers('situation');
 export default {
   components: {
-    Map,
-    TopNav,
+    // Map,
   },
   computed: {
-    ...mapState(['provinceData']),
+    // ...mapState(['provinceData']),
   },
   methods: {
-    ...mapActions([types.SET_PROVINCEDATA, types.GET_GEO]),
+    // ...mapActions([types.SET_PROVINCEDATA]),
+    ...mapActions([types.SET_INFECTIONDATA, types.GET_GEO]),
   },
   mounted() {
-    try {
-      this[types.SET_PROVINCEDATA]();
-    } catch (e) {
-      throw new Error();
-    }
+    this.$store.commit(`situation/${types.SET_INFECTIONDATA}`, statData);
+    // try {
+    //   this[types.SET_INFECTIONDATA]();
+    // } catch (e) {
+    //   throw new Error();
+    // }
   },
 };
 </script>
 
 <style scoped>
-.situation {
-  width: 100%;
-  height: 100%;
-}
 </style>

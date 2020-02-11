@@ -3,12 +3,15 @@
     <div class='header'>
       <Header/>
     </div>
+    <div class='nav'>
+      <TopNav/>
+    </div>
     <!-- <div class='aside'>
-      <Nav/>
+      <AsideNav/>
     </div> -->
     <div class='main'>
       <router-view/>
-      <!-- <MapBox/> -->
+      <BigMap/>
     </div>
     <div class='footer'>
       <Footer/>
@@ -19,15 +22,17 @@
 <script>
 import Header from './components/Header.vue';
 import Footer from './components/Footer.vue';
-// import Nav from './components/Nav.vue';
-// import MapBox from './components/Mapbox.vue';
+// import AsideNav from './components/AsideNav.vue';
+import TopNav from '@/components/TopNav.vue';
+import BigMap from '@/components/BigMap.vue';
 
 export default {
   components: {
     Header,
     Footer,
-    // Nav,
-    // MapBox,
+    // AsideNav,
+    TopNav,
+    BigMap,
   },
 };
 </script>
