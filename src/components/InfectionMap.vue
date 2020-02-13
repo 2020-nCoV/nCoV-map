@@ -39,7 +39,7 @@ export default {
   data() {
     return {
       style: {
-        height: `${window.innerHeight - 20}px`,
+        height: `${window.innerHeight}px`,
       },
       infectionLayers: [],
       statData: [],
@@ -152,6 +152,9 @@ export default {
       }
       return color;
     },
+    resize() {
+      this.style.height = `${window.innerHeight}px`;
+    },
   },
   watch: {
     mapData(newData) {
@@ -161,8 +164,12 @@ export default {
     },
   },
   mounted() {
+    window.addEventListener('resize', this.resize);
     this.$mapbox.accessToken = MAP_TOKEN;
     this.initMap();
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.resize);
   },
 };
 </script>

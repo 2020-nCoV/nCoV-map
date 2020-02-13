@@ -13,16 +13,16 @@ import chinaJson from 'echarts/map/json/china.json';
 import _ from 'lodash';
 import provinceData from '../assets/geojson/20200201';
 
-const LEVE_1 = '>1000人';
-const LEVE_2 = '500-999人';
-const LEVE_3 = '100-499人';
-const LEVE_4 = '10-99人';
-const LEVE_5 = '1-9人';
-const COLOR_LEVE_1 = '#7F1818';
-const COLOR_LEVE_2 = '#BF2121';
-const COLOR_LEVE_3 = '#FF7B69';
-const COLOR_LEVE_4 = '#FFAA85';
-const COLOR_LEVE_5 = '#FFEDCC';
+const LEVEL_1 = '>1000人';
+const LEVEL_2 = '500-999人';
+const LEVEL_3 = '100-499人';
+const LEVEL_4 = '10-99人';
+const LEVEL_5 = '1-9人';
+const COLOR_LEVEL_1 = '#7F1818';
+const COLOR_LEVEL_2 = '#BF2121';
+const COLOR_LEVEL_3 = '#FF7B69';
+const COLOR_LEVEL_4 = '#FFAA85';
+const COLOR_LEVEL_5 = '#FFEDCC';
 
 let max;
 const min = 1;
@@ -83,15 +83,15 @@ export default {
         const temp = data[i].value;
         let category = '';
         if (temp >= 1000) {
-          category = LEVE_1;
+          category = LEVEL_1;
         } else if (temp >= 500 && temp <= 999) {
-          category = LEVE_2;
+          category = LEVEL_2;
         } else if (temp >= 100 && temp <= 499) {
-          category = LEVE_3;
+          category = LEVEL_3;
         } else if (temp >= 10 && temp <= 99) {
-          category = LEVE_4;
+          category = LEVEL_4;
         } else if (temp >= 1 && temp <= 9) {
-          category = LEVE_5;
+          category = LEVEL_5;
         }
         newData.push({ name: data[i].name, value: [temp, category] });
       }
@@ -127,9 +127,9 @@ export default {
           bobttom: '60',
           calculable: true,
           seriesIndex: [1],
-          categories: [LEVE_1, LEVE_2, LEVE_3, LEVE_4, LEVE_5],
+          categories: [LEVEL_1, LEVEL_2, LEVEL_3, LEVEL_4, LEVEL_5],
           inRange: {
-            color: [COLOR_LEVE_1, COLOR_LEVE_2, COLOR_LEVE_3, COLOR_LEVE_4, COLOR_LEVE_5],
+            color: [COLOR_LEVEL_1, COLOR_LEVEL_2, COLOR_LEVEL_3, COLOR_LEVEL_4, COLOR_LEVEL_5],
           },
         },
         geo: {
