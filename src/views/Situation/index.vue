@@ -2,7 +2,7 @@
     <div class="situation">
         <span class='subtitle'>实时疫情</span>
         <!-- <Map :mapData='provinceData'/> -->
-        <div class='todo'>TODO： 实时疫情打点展示 以及 疫情数据图表展示</div>
+        <!-- <div class='todo'>TODO： 实时疫情打点展示 以及 疫情数据图表展示</div> -->
         <DataBoard></DataBoard>
         <FilterBox></FilterBox>
     </div>
