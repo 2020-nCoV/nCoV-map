@@ -1,5 +1,5 @@
 <template>
-    <div class='switch-button'>
+    <div class='switch-button' v-if='isShow'>
         <el-radio-group v-model="type" size="small" @change='handleSwitch'>
         <el-radio-button label="situation">实时</el-radio-button>
         <el-radio-button label="statistics">历史</el-radio-button>
@@ -12,6 +12,7 @@ export default {
   data() {
     return {
       type: 'situation',
+      isShow: false,
     };
   },
   methods: {
@@ -27,6 +28,11 @@ export default {
       },
       immediate: true,
     },
+  },
+  mounted() {
+    this.$bus.$on('mapReady', (value) => {
+      this.isShow = !!value;
+    });
   },
 };
 </script>

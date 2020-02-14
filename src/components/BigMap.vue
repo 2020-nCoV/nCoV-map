@@ -4,7 +4,14 @@
       id='big_map'
       :style='style'
     >
+    <el-radio-group class='map-buttons' v-model="type" size="small" @change='handleSwitch'>
+      <el-radio-button label="confirmedCount">确诊病例</el-radio-button>
+      <el-radio-button label="suspectedCount">怀疑病例</el-radio-button>
+      <el-radio-button label="curedCount">治愈病例</el-radio-button>
+      <el-radio-button label="deadCount">死亡病例</el-radio-button>
+    </el-radio-group>
     </div>
+
   </div>
 </template>
 
@@ -12,14 +19,20 @@
 import _ from 'lodash';
 import MapboxLanguage from '@mapbox/mapbox-gl-language';
 import { createNamespacedHelpers } from 'vuex';
-import adcodeMap from '@/assets/maps/adcodeMap';
+import adcodes from '@/assets/maps/adcodes';
+import axios from '@/utils/http';
 
 const { mapState } = createNamespacedHelpers('situation');
 
 const MAP_TOKEN = 'pk.eyJ1IjoiOTI0MTUyNjUxIiwiYSI6ImNrNjkwdXYwNjBhMzUzZHBtZHZqMHc1Y3QifQ.-ghyt3JdDn12Wk31yifDLw';
 const MAP_STYLE = 'mapbox://styles/mapbox/light-v9';
-const MAP_ZOOM = 3.1012459845601623; // 1.0; //
-const MAP_CENTER = [106.90464586973894, 38.38927373581919]; // [107.80592052753099, 29.359559158104966]; //
+const MAP_ZOOM = 1.1012459845601623; // 1.0; //
+const MAP_CENTER = [105.1171875, 37.10776507118514]; // [107.80592052753099, 29.359559158104966]; // [106.90464586973894, 38.38927373581919]; //
+const STYLE_LAYER_ID = 'cities-join';
+const CONFIRM = 'confirmedCount';
+// const SUSPECTED = 'suspectedCount';
+// const CURED = 'curedCount';
+// const DEAD = 'deadCount';
 
 // const maxValue = 20000;
 const LEVEL_1 = '1000';
@@ -32,7 +45,8 @@ const COLOR_LEVEL_2 = 'rgba(139,6,13,0.9)'; // '#BF2121'; // 'rgba(255,0,0,0.8)'
 const COLOR_LEVEL_3 = 'rgba(202,43,39,0.9)'; // '#FF7B69'; // 'rgba(255,0,0,0.3)'; //
 const COLOR_LEVEL_4 = 'rgba(255,123,103,0.9)'; // '#FFAA85'; // 'rgba(255,0,0,0.2)'; //
 const COLOR_LEVEL_5 = 'rgba(255,168,133,0.9)'; // '#FFEDCC'; // 'rgba(255,0,0,0.15)'; //
-const COLOR_DEFAULT = 'rgba(255,255,255,0.9)'; // 'rgba(255,255,255,0.8)'; // '#FFF';
+const COLOR_DEFAULT = 'rgba(255,255,255,0.5)'; // 'rgba(255,255,255,0.8)'; // '#FFF';
+
 export default {
   name: 'BigMap',
 
@@ -40,7 +54,9 @@ export default {
     return {
       style: {
         height: `${window.innerHeight}px`,
+        position: 'relative',
       },
+      type: CONFIRM,
     };
   },
   computed: {
@@ -53,13 +69,21 @@ export default {
         zoom: MAP_ZOOM,
       });
     },
+    adColors() {
+      const o = {};
+      adcodes.forEach((code) => {
+        o[code] = COLOR_DEFAULT;
+      });
+      return o;
+    },
   },
   watch: {
     infectionData(newData) {
       console.log(newData);
-      if (newData && this.mapInstance.isStyleLoaded()) {
-        this.draw(this.mapInstance, newData);
-        // to fix: 重复添加地图图层的报错
+
+      if (this.mapInstance.isStyleLoaded()) {
+        console.log('---cc---');
+        this.reColorMap(newData, this.type);
       }
     },
   },
@@ -90,65 +114,100 @@ export default {
     },
     initMapbox() {
       const map = this.mapInstance;
-      window.map = map;
       this.addMapControl();
       map.on('load', () => {
         map.flyTo({
-          center: [107.80592052753099, 29.359559158104966],
-          zoom: 4.0,
+          center: MAP_CENTER,
+          zoom: 3,
           speed: 0.3,
           curve: 1,
           easing(t) {
             return t;
           },
         });
-        const { origin } = window.location;
-        Object.keys(adcodeMap)
-          .forEach((key) => {
-            fetch(`${origin}/assets/geojson/${adcodeMap[key]}.json`)
-              .then(res => res.json())
-              .then((geo) => {
-                // console.log('key', key);
-                map.addSource(String(adcodeMap[key]), {
-                  type: 'geojson',
-                  data: geo,
-                });
-              });
-          });
-        if (this.infectionData) {
-          this.draw(map, this.infectionData);
-        }
+        this.drawMap();
+        map.once('zoomend', () => {
+          this.$bus.$emit('mapReady', true);
+        });
       });
     },
-    draw(mapInstance, data) {
-      if (data && Array.isArray(data) && data.length > 0) {
-        setTimeout(() => {
-          data.forEach(({ cities, locationId }) => {
-            const expression = ['match', ['get', 'adcode']];
-            cities.forEach((city) => {
-            // const red = (city.confirmedCount * 255 / maxValue);
-            // const color = `rgba(${255}, ${0}, ${0}, ${red})`;
-              const color = this.getColor(city.confirmedCount);
-              if (city.locationId !== 0) {
-                expression.push(city.locationId, color);
-              }
-            });
-            expression.push('rgba(0,0,0,0)');
-            if (expression.length < 4) return;
-            mapInstance.addLayer({
-              id: String(locationId),
-              type: 'fill',
-              source: String(locationId),
-              paint: {
-                'fill-color': expression,
-              },
-            }, 'waterway-label');
-          });
-        },
-        2000);
+    reColorMap(newData, type) {
+      const idata = this.extrDataObj(newData, type);
+      const colorExp = this.makeColorExp(idata);
+      this.mapInstance.setPaintProperty(STYLE_LAYER_ID, 'fill-color', colorExp);
+    },
+    clearLayer() {
+      try {
+        const { layers } = this.mapInstance.getStyle();
+        for (let i = 0; i < layers.length; i += 1) {
+          if (layers[i].id === STYLE_LAYER_ID) {
+            this.mapInstance.removeLayer(STYLE_LAYER_ID);
+            this.mapInstance.removeSource('cities');
+            break;
+          }
+        }
+      } catch (e) {
+        console.log(e);
       }
     },
+    async getGeo() {
+      const geo = await axios.request({ url: 'assets/geojson/allcitiesgeo.json' });
+      // console.log(geo);
+      return geo.data;
+    },
+    extrDataObj(rawData, category) {
+      // category: CONFIRM | SUSPECTED | CURED | DEAD
+      const temp = { ...this.adColors };
+      if (rawData && category) {
+        rawData.forEach(({ cities }) => {
+          cities.forEach((city) => {
+          // const green = (Math.random() * 10 / 15) * 255;
+          // const color = `rgba(${0}, ${green}, ${0}, 0.7)`;
+            const color = this.getColor(city[category]);
+            if (city.locationId !== 0) {
+              temp[city.locationId] = color;
+            }
+          });
+        });
+      }
+      // console.log(temp);
+      return temp;
+    },
+    makeColorExp(data) {
+      const expression = ['match', ['get', 'adcode']];
+      adcodes.forEach((code) => {
+        expression.push(Number(code), data[code]);
+      });
+      expression.push('rgba(0,0,0,0)');
+      // console.log(expression);
+      return expression;
+    },
+    drawMap() {
+      const idata = this.extrDataObj(this.infectionData, this.type);
+      this.getGeo().then((geodata) => {
+        // console.log(geodata);
+        this.mapInstance.addSource('cities', {
+          type: 'geojson',
+          data: geodata,
+        });
 
+        this.mapInstance.addLayer(
+          {
+            id: STYLE_LAYER_ID,
+            type: 'fill',
+            source: 'cities',
+            // 'source-layer': 'cities',
+            paint: {
+              'fill-color': this.makeColorExp(idata),
+            },
+          },
+          'waterway-label',
+        );
+      });
+    },
+    handleSwitch(type) {
+      this.reColorMap(this.infectionData, type);
+    },
   },
   mounted() {
     this.$mapbox.accessToken = MAP_TOKEN;
@@ -165,4 +224,8 @@ export default {
   .map-wraper
     width: 100%
     height: 100%
+  .map-buttons
+    position: absolute
+    top: 100px
+    z-index 100
 </style>
