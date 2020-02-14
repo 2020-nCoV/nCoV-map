@@ -4,7 +4,14 @@
       id='big_map'
       :style='style'
     >
+    <el-radio-group class='map-buttons' v-model="type" size="small" @change='handleSwitch'>
+      <el-radio-button label="confirmedCount">确诊病例</el-radio-button>
+      <el-radio-button label="suspectedCount">怀疑病例</el-radio-button>
+      <el-radio-button label="curedCount">治愈病例</el-radio-button>
+      <el-radio-button label="deadCount">死亡病例</el-radio-button>
+    </el-radio-group>
     </div>
+
   </div>
 </template>
 
@@ -47,7 +54,9 @@ export default {
     return {
       style: {
         height: `${window.innerHeight}px`,
+        position: 'relative',
       },
+      type: CONFIRM,
     };
   },
   computed: {
@@ -74,7 +83,7 @@ export default {
 
       if (this.mapInstance.isStyleLoaded()) {
         console.log('---cc---');
-        this.reColorMap(newData);
+        this.reColorMap(newData, this.type);
       }
     },
   },
@@ -122,8 +131,8 @@ export default {
         });
       });
     },
-    reColorMap(newData) {
-      const idata = this.extrDataObj(newData, CONFIRM);
+    reColorMap(newData, type) {
+      const idata = this.extrDataObj(newData, type);
       const colorExp = this.makeColorExp(idata);
       this.mapInstance.setPaintProperty(STYLE_LAYER_ID, 'fill-color', colorExp);
     },
@@ -174,7 +183,7 @@ export default {
       return expression;
     },
     drawMap() {
-      const idata = this.extrDataObj(this.infectionData, CONFIRM);
+      const idata = this.extrDataObj(this.infectionData, this.type);
       this.getGeo().then((geodata) => {
         // console.log(geodata);
         this.mapInstance.addSource('cities', {
@@ -196,6 +205,9 @@ export default {
         );
       });
     },
+    handleSwitch(type) {
+      this.reColorMap(this.infectionData, type);
+    },
   },
   mounted() {
     this.$mapbox.accessToken = MAP_TOKEN;
@@ -212,4 +224,8 @@ export default {
   .map-wraper
     width: 100%
     height: 100%
+  .map-buttons
+    position: absolute
+    top: 100px
+    z-index 100
 </style>
