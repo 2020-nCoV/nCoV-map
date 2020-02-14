@@ -37,7 +37,7 @@
             </el-select>
           </div>
 
-          <div class='filter-item'>
+          <!-- <div class='filter-item'>
             <el-select
             v-model="areaValue"
             placeholder="区域"
@@ -50,7 +50,7 @@
                 :value="item.value">
               </el-option>
             </el-select>
-          </div>
+          </div> -->
 
           <div class='chart-wrapper'>
             <LineChart :cData='infectionData'></LineChart>
@@ -144,7 +144,7 @@ export default {
   top: 0;
   right: 25px;
   width: 350px;
-  height: 300px;
+  height: 350px;
   position: absolute;
   border-radius: 4px 0 4px 4px;
   background-color: #fff;
@@ -176,6 +176,6 @@ export default {
  width: 120px;
 
 .el-select.el-select--small
- width: 80px;
+ width: 120px;
 
 </style>
