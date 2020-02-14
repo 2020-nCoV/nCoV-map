@@ -13,6 +13,7 @@ import store from './store';
 Vue.use(ElementUI, { locale });
 Vue.prototype.$echarts = echarts;
 Vue.prototype.$mapbox = mapbox;
+Vue.prototype.$bus = new Vue();
 
 Vue.config.productionTip = false;
 router.beforeEach((to, from, next) => {
