@@ -43,7 +43,6 @@ export default {
   z-index: 10;
   left: 50%;
   margin-left: -50px;
-  margin-top: 2px;
 }
 
 @media (max-width:719px) {

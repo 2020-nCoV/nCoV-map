@@ -4,6 +4,7 @@
 
 <script>
 const option = {
+  color: ['#f00', '#ffa500', '#008000', '#000'],
   title: {
     text: '全国疫情趋势图',
     left: 'center',
@@ -26,7 +27,7 @@ const option = {
     name: '单位:例',
     type: 'value',
     nameLocation: 'end',
-    min: 35000,
+    min: 500,
     axisLabel: {
       fontSize: 10,
     },
@@ -51,16 +52,12 @@ const option = {
     right: 10,
     bottom: 50,
   },
-  series: [{
-    data: [38338, 42125, 47276, 48675, 51328, 54401, 59907],
-    type: 'line',
-  }],
 };
 export default {
-  props: ['infectionData'],
+  props: ['cData'],
   mounted() {
-    console.log(this.$refs);
     const myChart = this.$echarts.init(this.$refs.lineChart);
+    option.series = this.cData;
     myChart.setOption(option);
   },
 
