@@ -14,6 +14,8 @@ import axios from '@/utils/http';
 const { mapState } = createNamespacedHelpers('situation');
 
 const MAP_TOKEN = 'pk.eyJ1IjoiOTI0MTUyNjUxIiwiYSI6ImNrNjkwdXYwNjBhMzUzZHBtZHZqMHc1Y3QifQ.-ghyt3JdDn12Wk31yifDLw';
+// 黑色主题
+// const MAP_STYLE = 'mapbox://styles/mapbox/navigation-guidance-night-v4';
 const MAP_STYLE = 'mapbox://styles/mapbox/light-v9';
 const MAP_ZOOM = 1.1012459845601623; // 1.0; //
 const MAP_CENTER = [105.1171875, 37.10776507118514]; // [107.80592052753099, 29.359559158104966]; // [106.90464586973894, 38.38927373581919]; //
@@ -114,7 +116,8 @@ export default {
             return t;
           },
         });
-        this.drawMap();
+        // this.drawMap();
+        this.drawHeatMap(); // 热力图
         map.once('zoomend', () => {
           this.$bus.$emit('mapReady', true);
         });
@@ -191,6 +194,79 @@ export default {
             },
           },
           'waterway-label',
+        );
+      });
+    },
+    // 获取对应城市的数据
+    extrPointDataObj(rawData, category) {
+      const temp = new Map();
+      if (rawData && category) {
+        rawData.forEach(({ cities }) => {
+          cities.forEach((city) => {
+            const count = city[category];
+            if (city.locationId !== 0) {
+              temp.set(city.locationId, count);
+            }
+          });
+        });
+      }
+      return temp;
+    },
+    toPointLayer(data) {
+      // 制作热力图所需的点图层
+      const idata = this.extrPointDataObj(this.infectionData, this.type);
+      const mod = {
+        type: 'FeatureCollection',
+        features: [],
+      };
+      data.features.forEach((e) => {
+        mod.features.push({
+          type: 'Feature',
+          properties: {
+            id: e.properties.adcode,
+            mag: idata.get(e.properties.adcode) || 0,
+          },
+          geometry: {
+            type: 'Point',
+            coordinates: e.properties.center,
+          },
+        });
+      });
+      // console.log(mod);
+      return mod;
+    },
+    drawHeatMap() {
+      this.getGeo().then((geodata) => {
+        const pLayer = this.toPointLayer(geodata);
+        console.log(pLayer);
+        // 也可以使用 data: './../assets/geojson/pointLayer.geojson'
+        this.mapInstance.addSource('cities', {
+          type: 'geojson',
+          data: pLayer,
+        });
+        this.mapInstance.addLayer(
+          {
+            id: 'heatmap',
+            type: 'heatmap',
+            source: 'cities',
+            maxzoom: 8,
+            paint: {
+              // 热力图配置 https://docs.mapbox.com/help/tutorials/make-a-heatmap-with-mapbox-gl-js/
+              // 示例 https://docs.mapbox.com/mapbox-gl-js/example/heatmap-layer/
+              'heatmap-weight': {
+                property: 'mag',
+                // identity | exponential | interval | categorical
+                type: 'categorical',
+                stops: [
+                  [1, 0],
+                  [10, 0.2],
+                  [50, 0.6],
+                  [100, 0.7],
+                  [1000, 1],
+                ],
+              },
+            },
+          },
         );
       });
     },
