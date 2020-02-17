@@ -11,7 +11,7 @@
 <script>
 import chinaJson from 'echarts/map/json/china.json';
 import _ from 'lodash';
-import provinceData from '../assets/geojson/20200201';
+import provinceData from '../assets/20200201';
 
 const LEVEL_1 = '>1000人';
 const LEVEL_2 = '500-999人';
