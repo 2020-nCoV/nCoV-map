@@ -1,17 +1,6 @@
 <template>
   <div class='map-wrapper'>
-    <div
-      id='big_map'
-      :style='style'
-    >
-    <el-radio-group class='map-buttons' v-model="type" size="small" @change='handleSwitch'>
-      <el-radio-button label="confirmedCount">确诊病例</el-radio-button>
-      <el-radio-button label="suspectedCount">怀疑病例</el-radio-button>
-      <el-radio-button label="curedCount">治愈病例</el-radio-button>
-      <el-radio-button label="deadCount">死亡病例</el-radio-button>
-    </el-radio-group>
-    </div>
-
+    <div id='big_map' :style='style'></div>
   </div>
 </template>
 
@@ -94,8 +83,8 @@ export default {
       }, 400);
     },
     addMapControl() {
-      this.mapInstance.addControl(new this.$mapbox.NavigationControl(), 'top-right');
-      this.mapInstance.addControl(new this.$mapbox.FullscreenControl());
+      // this.mapInstance.addControl(new this.$mapbox.NavigationControl(), 'top-right');
+      // this.mapInstance.addControl(new this.$mapbox.FullscreenControl());
       this.mapInstance.addControl(new MapboxLanguage());
     },
     getColor(d) {
@@ -205,14 +194,14 @@ export default {
         );
       });
     },
-    handleSwitch(type) {
-      this.reColorMap(this.infectionData, type);
-    },
   },
   mounted() {
     this.$mapbox.accessToken = MAP_TOKEN;
     this.initMapbox();
     window.addEventListener('resize', this.resize());
+    this.$bus.$on('infectionType', (type) => {
+      this.reColorMap(this.infectionData, type);
+    });
   },
   destroyed() {
     window.removeEventListener('resize', this.resize());
@@ -227,5 +216,6 @@ export default {
   .map-buttons
     position: absolute
     top: 100px
-    z-index 100
+    right: 400px
+    z-index 9
 </style>
