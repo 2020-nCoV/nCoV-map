@@ -6,7 +6,7 @@
           <div class="map-overlay-inner">
             <h2>疫情发展历史</h2>
             <label id="date">{{sliderDate}}</label>
-            <input id="slider" type="range" min=0 v-bind:max="maxStep" v-bind:value='sliderIndex' @change='sliderChangeHandler'/>
+            <input id="slider" type="range" min=0 v-bind:max="maxStep" value=0 @change='sliderChangeHandler'/>
           </div>
         </div>
 
@@ -24,9 +24,7 @@ export default {
   data() {
     return {
       maxStep: overtimeData.length - 1,
-      sliderIndex: 0,
       sliderDate: overtimeData[0].date,
-      sliderData: overtimeData[0].data,
     };
   },
   computed: {
@@ -34,18 +32,12 @@ export default {
   methods: {
     sliderChangeHandler(event) {
       const currentIndex = Number(event.target.value);
-      this.sliderIndex = currentIndex;
       this.sliderDate = overtimeData[currentIndex].date;
-      this.sliderData = overtimeData[currentIndex].data;
-    },
-  },
-  watch: {
-    sliderData(newData) {
-      this.$store.commit(`situation/${types.SET_INFECTIONDATA}`, newData);
+      this.$store.commit(`situation/${types.SET_INFECTIONDATA}`, overtimeData[currentIndex].data);
     },
   },
   mounted() {
-    this.$store.commit(`situation/${types.SET_INFECTIONDATA}`, this.sliderData);
+    this.$store.commit(`situation/${types.SET_INFECTIONDATA}`, overtimeData[0].data);
   },
 };
 </script>
