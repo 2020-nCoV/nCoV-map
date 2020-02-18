@@ -2205,7 +2205,7 @@ export default [
     }],
   },
   {
-    date: '2020-01-03',
+    date: '2020-01-04',
     data: [{
       provinceName: '湖北省',
       provinceShortName: '湖北',
