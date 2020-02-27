@@ -20,7 +20,7 @@
           <div class='filter-title'>病例类型</div>
           <el-radio-group class='filter-item' v-model='type' size='mini' @change='handleSwitch'>
             <el-radio-button label='confirmedCount'>确诊</el-radio-button>
-            <el-radio-button label='suspectedCount'>疑似</el-radio-button>
+            <el-radio-button label='suspectedCount'>怀疑</el-radio-button>
             <el-radio-button label='curedCount'>治愈</el-radio-button>
             <el-radio-button label='deadCount'>死亡</el-radio-button>
           </el-radio-group>

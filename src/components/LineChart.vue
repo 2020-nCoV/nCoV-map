@@ -50,35 +50,14 @@ const option = {
     top: 60,
     left: 40,
     right: 10,
-    bottom: 60,
+    bottom: 50,
   },
 };
 export default {
   props: ['cData'],
-  methods: {
-    makeLegend() {
-      const result = {
-        show: true,
-        bottom: 5,
-        itemWidth: 10,
-        itemHeight: 10,
-        textStyle: {
-          fontSize: 10,
-        },
-        data: [],
-      };
-      this.cData.forEach((item) => {
-        result.data.push({
-          name: item.name,
-        });
-      });
-      return result;
-    },
-  },
   mounted() {
     const myChart = this.$echarts.init(this.$refs.lineChart);
     option.series = this.cData;
-    option.legend = this.makeLegend();
     myChart.setOption(option);
   },
 

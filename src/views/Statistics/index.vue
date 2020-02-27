@@ -1,6 +1,6 @@
 <template>
     <div>
-        <!-- <span class='subtitle'> 疫情历史</span> -->
+        <span class='subtitle'> 疫情历史</span>
 
         <div class="map-overlay top">
           <div class="map-overlay-inner">
