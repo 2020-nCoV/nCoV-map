@@ -10,5 +10,6 @@ import 'echarts/lib/component/visualMap';
 import 'echarts/lib/component/geo';
 import 'echarts/lib/component/axis';
 import 'echarts/lib/component/grid';
+import 'echarts/lib/component/legend';
 
 Vue.prototype.$echarts = echarts;
