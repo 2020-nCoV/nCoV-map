@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@mapbox/mapbox-gl-language": "^0.10.1",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "core-js": "^3.4.4",
     "cross-env": "^7.0.0",
     "echarts": "^4.6.0",
